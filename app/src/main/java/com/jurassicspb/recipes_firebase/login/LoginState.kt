@@ -1,6 +1,8 @@
 package com.jurassicspb.recipes_firebase.login
 
-class LoginState {
+import com.jurassicspb.recipes_firebase.base.BaseState
+
+class LoginState : BaseState() {
     var showStartAnimation = SingleEvent(false)
     var userExists = SingleEvent(false)
     val message = Message()

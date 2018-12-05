@@ -1,24 +1,14 @@
 package com.jurassicspb.recipes_firebase.login
 
 import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.arch.lifecycle.ViewModel
+import com.jurassicspb.recipes_firebase.base.BaseViewModel
 import com.jurassicspb.recipes_firebase.extensions.execute
 import com.jurassicspb.recipes_firebase.extensions.isValidEmail
 import com.jurassicspb.recipes_firebase.repository.Repository
-import io.reactivex.disposables.CompositeDisposable
 
-class LoginViewModel(private val repository: Repository) : ViewModel(), LifecycleObserver {
-    var data = LoginLiveData(LoginState())
-        private set
+class LoginViewModel(private val repository: Repository) : BaseViewModel<LoginState>(LoginState()) {
     private var restoring = false
-    private val compositeDisposable = CompositeDisposable()
-
-    override fun onCleared() {
-        compositeDisposable.clear()
-        super.onCleared()
-    }
 
     fun onSignInButtonClicked(email: String, password: String) {
         if (!isInputValid(email, password)) return
@@ -32,7 +22,7 @@ class LoginViewModel(private val repository: Repository) : ViewModel(), Lifecycl
         repository.register(email, password).execute(compositeDisposable)
     }
 
-    fun onOwnerCreated(restoring: Boolean) {
+    override fun onOwnerCreated(restoring: Boolean) {
         if (restoring) {
             this.restoring = restoring
             data.value.showStartAnimation.value = false
@@ -46,7 +36,7 @@ class LoginViewModel(private val repository: Repository) : ViewModel(), Lifecycl
     }
 
     private fun handleAuthResult(it: Repository.AuthResult) {
-        if (it.message != null || it.message != ""){
+        if (it.message != null || it.message != "") {
             data.value.authResult.showError.value = it.message!!
             data.notifyObservers()
         }

@@ -1,8 +1,8 @@
-package com.jurassicspb.recipes_firebase.login
+package com.jurassicspb.recipes_firebase.base
 
 import android.arch.lifecycle.LiveData
 
-class LoginLiveData (state: LoginState) : LiveData<LoginState>() {
+class BaseLiveData<State : BaseState> (state: State) : LiveData<State>() {
 
     init {
         value = state
