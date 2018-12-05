@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "872588137184",
+    "firebase_url": "https://fir-recipes-63b58.firebaseio.com",
+    "project_id": "fir-recipes-63b58",
+    "storage_bucket": "fir-recipes-63b58.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872588137184:android:9b9ffd3aae684f09",
+        "android_client_info": {
+          "package_name": "com.jurassicspb.recipes_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872588137184-2pi1ctndr165shb7lbqvhvnolcgedab4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhPNAV8egBaams4xZLAiCRb0Bc4JL2zXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

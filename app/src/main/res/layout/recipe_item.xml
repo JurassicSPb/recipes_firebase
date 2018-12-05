@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+    <View
+            android:id="@+id/recipe_item_outer_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGrey300"/>
+
+    <View
+            android:id="@+id/recipe_item_inner_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.0"
+            android:background="@color/colorGrey600"/>
+
+    <ImageView
+            android:id="@+id/handle"
+            android:layout_width="?listPreferredItemHeight"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="center"
+            android:src="@drawable/ic_dehaze_black_24dp"/>
+
+    <TextView
+            android:id="@+id/recipe_item_name"
+            android:padding="16dp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textSize="16sp"
+            tools:text="Hello world"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toEndOf="@id/handle"
+            app:layout_constraintEnd_toStartOf="@+id/recipe_item_favorite_container"
+            android:layout_width="0dp"/>
+
+    <FrameLayout
+            android:id="@+id/recipe_item_favorite_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="?listPreferredItemHeight"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <View android:layout_width="1dp"
+              android:layout_height="match_parent"
+              android:background="@android:color/black"/>
+
+        <ImageView
+                android:id="@+id/recipe_item_favorite"
+                android:layout_gravity="center"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_not_favorite"/>
+
+    </FrameLayout>
+
+</android.support.constraint.ConstraintLayout>
