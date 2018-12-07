@@ -1,17 +1,22 @@
 package com.jurassicspb.recipes_firebase.recipes
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import com.jurassicspb.recipes_firebase.R
+import com.jurassicspb.recipes_firebase.base.BaseActivity
+import com.jurassicspb.recipes_firebase.login.SingleEvent
+import com.jurassicspb.recipes_firebase.model.RecipeItem
 import kotlinx.android.synthetic.main.activity_recipes.*
 import org.koin.android.ext.android.inject
 
 
-class RecipesActivity : AppCompatActivity(), RecipeListItemTouchHelper.OnStartDragListener {
+class RecipesActivity : BaseActivity<RecipeState, RecipeViewModel>(RecipeViewModel::class),
+    RecipeListItemTouchHelper.OnStartDragListener {
+
+    override val layoutRes = R.layout.activity_recipes
 
     private val diffUtilCallback = RecipeDiffUtilsCallback()
     private lateinit var itemTouchHelper: ItemTouchHelper
@@ -19,8 +24,6 @@ class RecipesActivity : AppCompatActivity(), RecipeListItemTouchHelper.OnStartDr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_recipes)
 
         recipesAdapter.apply {
             recyclerView = recipes_list
@@ -30,37 +33,28 @@ class RecipesActivity : AppCompatActivity(), RecipeListItemTouchHelper.OnStartDr
         recipes_list.apply {
             layoutManager = LinearLayoutManager(this@RecipesActivity, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(RecipesItemDecoration(this@RecipesActivity))
-            adapter = recipesAdapter.apply {
-                items = mutableListOf(
-                    RecipeItem(0, "0"),
-                    RecipeItem(1, "1"),
-                    RecipeItem(2, "2"),
-                    RecipeItem(3, "30", true)
-                )
-                notifyDataSetChanged()
-            }
+            adapter = recipesAdapter
             itemTouchHelper = ItemTouchHelper(RecipeListItemTouchHelper(recipesAdapter)).apply {
                 attachToRecyclerView(recipes_list)
             }
         }
+    }
 
-        update_recipes_button.setOnClickListener {
-            updateFavorites()
-        }
+    override fun applyChanges(it: RecipeState) {
+        updateRecipes(it.recipeItems)
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper.startDrag(viewHolder)
     }
 
-    private fun updateFavorites() {
-        val updatedList = mutableListOf(RecipeItem(0, "0", true), RecipeItem(1, "3"), RecipeItem(2, "4"))
+    private fun updateRecipes(recipeItems: SingleEvent<List<RecipeItem>>) {
         diffUtilCallback.apply {
             oldData = recipesAdapter.items
-            newData = updatedList
+            newData = recipeItems.value
         }
         val productDiffResult = DiffUtil.calculateDiff(diffUtilCallback)
-        recipesAdapter.items = updatedList
+        recipesAdapter.items = recipeItems.value.toMutableList()
         productDiffResult.dispatchUpdatesTo(recipesAdapter)
     }
 }

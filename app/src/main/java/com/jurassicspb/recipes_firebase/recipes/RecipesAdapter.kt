@@ -14,8 +14,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.jurassicspb.recipes_firebase.R
-import com.jurassicspb.recipes_firebase.extensions.color
 import com.jurassicspb.recipes_firebase.extensions.swap
+import com.jurassicspb.recipes_firebase.model.RecipeItem
 import com.jurassicspb.recipes_firebase.util.AnimationHelper
 import java.util.*
 

@@ -1,6 +1,7 @@
 package com.jurassicspb.recipes_firebase.recipes
 
 import android.support.v7.util.DiffUtil
+import com.jurassicspb.recipes_firebase.model.RecipeItem
 
 class RecipeDiffUtilsCallback : DiffUtil.Callback() {
     var oldData: List<RecipeItem> = ArrayList()
