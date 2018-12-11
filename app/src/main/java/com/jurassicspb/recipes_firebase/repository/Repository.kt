@@ -1,17 +1,18 @@
 package com.jurassicspb.recipes_firebase.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.jurassicspb.recipes_firebase.model.RecipeItem
 import com.jurassicspb.recipes_firebase.storage.StorageLayer
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 class Repository(
     private val storageLayer: StorageLayer,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val database: FirebaseDatabase
 ) {
 
     private val subject = PublishSubject.create<AuthResult>()
@@ -43,9 +44,25 @@ class Repository(
     fun getAuthResult(): Observable<AuthResult> = subject
 
     fun saveRecipeItems(items: List<RecipeItem>): Maybe<List<RecipeItem>> {
+        return storageLayer.saveRecipes(items).andThen(storageLayer.getRecipes())
+    }
+
+    fun getFavorites(): Completable {
         return Completable.fromAction {
-            storageLayer.saveRecipes(items)
-        }.andThen(storageLayer.getRecipes())
+            val a = database.getReference("favorites")
+            a.setValue("d")
+//                .addValueEventListener(object : ValueEventListener{
+//                    override fun onCancelled(p0: DatabaseError) {"d
+//                        println("SSSSSS " + p0)
+//                    }
+//
+//                    override fun onDataChange(p0: DataSnapshot) {
+//                        println("SSSSSS2 " + p0)
+//                    }
+//
+//                })
+
+        }
     }
 
     data class AuthResult(

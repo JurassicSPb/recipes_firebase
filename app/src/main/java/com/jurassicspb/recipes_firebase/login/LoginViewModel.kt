@@ -14,12 +14,14 @@ class LoginViewModel(private val repository: Repository) : BaseViewModel<LoginSt
         if (!isInputValid(email, password)) return
 
         repository.signIn(email, password).execute(compositeDisposable)
+        handleProgressBar(true)
     }
 
     fun onRegisterButtonClicked(email: String, password: String) {
         if (!isInputValid(email, password)) return
 
         repository.register(email, password).execute(compositeDisposable)
+        handleProgressBar(true)
     }
 
     override fun onOwnerCreated(restoring: Boolean) {
@@ -36,14 +38,20 @@ class LoginViewModel(private val repository: Repository) : BaseViewModel<LoginSt
     }
 
     private fun handleAuthResult(it: Repository.AuthResult) {
-        if (it.message != null || it.message != "") {
+        if (it.message != null && it.message != "") {
             data.value.authResult.showError.value = it.message!!
-            data.notifyObservers()
+            handleProgressBar(false)
+            return
         }
         if (it.isSuccessful) {
             data.value.authResult.isSuccessful.value = true
-            data.notifyObservers()
+            handleProgressBar(false)
         }
+    }
+
+    private fun handleProgressBar(visible: Boolean) {
+        data.value.showProgress.value = visible
+        data.notifyObservers()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)

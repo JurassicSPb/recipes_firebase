@@ -28,5 +28,11 @@ abstract class BaseActivity<State : BaseState, ViewModel : BaseViewModel<State>>
         })
     }
 
+    override fun onDestroy() {
+        lifecycle.removeObserver(viewModel)
+
+        super.onDestroy()
+    }
+
     abstract fun applyChanges(it: State)
 }

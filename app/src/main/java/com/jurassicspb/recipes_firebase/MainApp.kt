@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.jurassicspb.recipes_firebase.constants.DATABASE_NAME
 import com.jurassicspb.recipes_firebase.login.LoginViewModel
 import com.jurassicspb.recipes_firebase.recipes.RecipeViewModel
@@ -30,10 +31,11 @@ class MainApp : Application() {
                 StorageRecipeToRecipeItemMapper()
             )
         }
-        single { Repository(get(), get()) }
+        single { Repository(get(), get(), get()) }
         viewModel { LoginViewModel(get()) }
         viewModel { RecipeViewModel(get()) }
         single { FirebaseAuth.getInstance() }
+        single { FirebaseDatabase.getInstance() }
         factory { AnimationHelper() }
         factory { RecipesAdapter(get(), applicationContext) }
         factory { RecipesActivity() }

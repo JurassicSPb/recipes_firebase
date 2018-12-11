@@ -3,8 +3,10 @@ package com.jurassicspb.recipes_firebase.storage
 import com.jurassicspb.recipes_firebase.model.RecipeItem
 import com.jurassicspb.recipes_firebase.storage.dao.mappers.RecipeItemToStorageRecipeMapper
 import com.jurassicspb.recipes_firebase.storage.dao.mappers.StorageRecipeToRecipeItemMapper
+import com.jurassicspb.recipes_firebase.storage.entities.StorageRecipe
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.functions.BiFunction
 
 class StorageLayer(
     private val appDataBase: AppDataBase,
@@ -19,6 +21,15 @@ class StorageLayer(
     }
 
     fun getRecipes(): Maybe<List<RecipeItem>> =
-        appDataBase.recipeDao().getAll()
-            .map { storageRecipeMapper.map(it) }
+        Maybe.defer {
+            Maybe.zip(appDataBase.recipeDao().getAll(),
+                appDataBase.recipeFavoritesDao().getAll(),
+                BiFunction { recipes: List<StorageRecipe>, favorites: List<Long> ->
+                    storageRecipeMapper.map(
+                        recipes,
+                        favorites
+                    )
+                }
+            )
+        }
 }

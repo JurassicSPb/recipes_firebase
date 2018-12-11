@@ -7,6 +7,7 @@ class LoginState : BaseState() {
     var userExists = SingleEvent(false)
     val message = Message()
     val authResult = AuthResult()
+    var showProgress = SingleEvent(false)
 
     inner class Message {
         val showWrongEmail = SingleEvent(false)

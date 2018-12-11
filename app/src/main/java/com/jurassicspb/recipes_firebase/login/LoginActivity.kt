@@ -5,11 +5,13 @@ import android.os.Bundle
 import com.jurassicspb.recipes_firebase.R
 import com.jurassicspb.recipes_firebase.base.BaseActivity
 import com.jurassicspb.recipes_firebase.extensions.toast
+import com.jurassicspb.recipes_firebase.extensions.visible
 import com.jurassicspb.recipes_firebase.recipes.RecipesActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.email_login_form as form
 import kotlinx.android.synthetic.main.activity_login.email_register_button as register
 import kotlinx.android.synthetic.main.activity_login.email_sign_in_button as signIn
+import kotlinx.android.synthetic.main.activity_login.login_progress as progressBar
 
 class LoginActivity : BaseActivity<LoginState, LoginViewModel>(LoginViewModel::class) {
     override val layoutRes: Int = R.layout.activity_login
@@ -30,11 +32,21 @@ class LoginActivity : BaseActivity<LoginState, LoginViewModel>(LoginViewModel::c
         showMessage(it.message)
         checkUserExists(it.userExists)
         checkAuthResult(it.authResult)
+        showProgressBar(it.showProgress)
+    }
+
+    private fun showProgressBar(showProgress: SingleEvent<Boolean>) {
+        if (showProgress.needToShow) progressBar.visible(showProgress.value)
     }
 
     private fun checkAuthResult(authResult: LoginState.AuthResult) = with(authResult) {
-        if (showError.needToShow) toast(showError.value)
-        if (isSuccessful.needToShow && isSuccessful.value) startActivity()
+        if (showError.needToShow) {
+            toast(showError.value)
+            return
+        }
+        if (isSuccessful.needToShow && isSuccessful.value) {
+            startActivity()
+        }
     }
 
     private fun checkUserExists(userExists: SingleEvent<Boolean>) {

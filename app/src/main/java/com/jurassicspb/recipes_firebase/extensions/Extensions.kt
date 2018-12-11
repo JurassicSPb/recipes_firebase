@@ -41,6 +41,10 @@ fun Context.dimenPx(@DimenRes dimenRes: Int): Int = resources.getDimensionPixelS
 
 fun Context.dimenPxFloat(@DimenRes dimenRes: Int): Float = resources.getDimension(dimenRes)
 
+fun View.visible(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.GONE
+}
+
 fun <T>MutableList<T>.swap(from: Int, to: Int){
     val tmp = this[from]
     this[from] = this[to]

@@ -5,14 +5,15 @@ import android.arch.persistence.room.RoomDatabase
 import com.jurassicspb.recipes_firebase.storage.dao.RecipeDao
 import com.jurassicspb.recipes_firebase.storage.dao.RecipeDeletedDao
 import com.jurassicspb.recipes_firebase.storage.dao.RecipeFavoritesDao
+import com.jurassicspb.recipes_firebase.storage.entities.StorageFavorite
 import com.jurassicspb.recipes_firebase.storage.entities.StorageRecipe
 
-@Database(entities = [StorageRecipe::class], version = 1, exportSchema = false)
+@Database(entities = [StorageRecipe::class, StorageFavorite::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun recipeDao(): RecipeDao
 
-//    abstract fun recipeFavoritesDao(): RecipeFavoritesDao
+    abstract fun recipeFavoritesDao(): RecipeFavoritesDao
 
 //    abstract fun recipeDeletedDao(): RecipeDeletedDao
 
