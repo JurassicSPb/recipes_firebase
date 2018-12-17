@@ -13,6 +13,7 @@ import com.jurassicspb.recipes_firebase.recipes.RecipesAdapter
 import com.jurassicspb.recipes_firebase.repository.Repository
 import com.jurassicspb.recipes_firebase.storage.AppDataBase
 import com.jurassicspb.recipes_firebase.storage.StorageLayer
+import com.jurassicspb.recipes_firebase.storage.dao.mappers.FavoritesIdToStorageFavoriteMapper
 import com.jurassicspb.recipes_firebase.storage.dao.mappers.RecipeItemToStorageRecipeMapper
 import com.jurassicspb.recipes_firebase.storage.dao.mappers.StorageRecipeToRecipeItemMapper
 import com.jurassicspb.recipes_firebase.util.AnimationHelper
@@ -28,7 +29,8 @@ class MainApp : Application() {
             StorageLayer(
                 get(),
                 RecipeItemToStorageRecipeMapper(),
-                StorageRecipeToRecipeItemMapper()
+                StorageRecipeToRecipeItemMapper(),
+                FavoritesIdToStorageFavoriteMapper()
             )
         }
         single { Repository(get(), get(), get()) }

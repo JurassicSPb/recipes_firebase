@@ -12,6 +12,11 @@ import android.support.v4.content.ContextCompat
 import android.util.Property
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.jurassicspb.recipes_firebase.R
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -33,7 +38,8 @@ fun Context.toast(string: String, duration: Int = Toast.LENGTH_SHORT) {
 fun Context.drawable(@DrawableRes drawableRes: Int): Drawable? = ContextCompat.getDrawable(this, drawableRes)
 
 fun Context.drawableOrDefault(@DrawableRes drawableRes: Int, @DrawableRes default: Int = R.drawable.item_decorator) =
-    this.drawable(drawableRes) ?: this.drawable(default) ?: throw IllegalArgumentException("Default drawable value is null")
+    this.drawable(drawableRes) ?: this.drawable(default)
+    ?: throw IllegalArgumentException("Default drawable value is null")
 
 fun Context.color(@ColorRes colorRes: Int): Int = ContextCompat.getColor(this, colorRes)
 
@@ -45,10 +51,39 @@ fun View.visible(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
-fun <T>MutableList<T>.swap(from: Int, to: Int){
+fun <T> MutableList<T>.swap(from: Int, to: Int) {
     val tmp = this[from]
     this[from] = this[to]
     this[to] = tmp
+}
+
+fun DatabaseReference.addListener(
+    onDataChange: (DataSnapshot) -> Unit,
+    onError: (DatabaseError) -> Unit
+) {
+    addValueEventListener(object : ValueEventListener {
+        override fun onCancelled(error: DatabaseError) {
+            onError(error)
+            removeEventListener(this)
+        }
+
+        override fun onDataChange(snapshot: DataSnapshot) {
+            onDataChange(snapshot)
+            removeEventListener(this)
+        }
+    })
+}
+
+fun <T> Task<T>.addListener(
+    onSuccess: (T) -> Unit,
+    onFailure: (Throwable) -> Unit
+) {
+    addOnFailureListener {
+        onFailure(it)
+    }
+    addOnSuccessListener {
+        onSuccess(it)
+    }
 }
 
 fun View.toAnimator(

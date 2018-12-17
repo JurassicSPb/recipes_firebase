@@ -16,4 +16,7 @@ interface RecipeFavoritesDao {
     @Query("SELECT favId FROM favorites")
     fun getAll(): Maybe<List<Long>>
 
+    @Query("DELETE FROM favorites")
+    fun deleteAll()
+
 }

@@ -10,6 +10,15 @@ class RecipeViewModel(private val repository: Repository) : BaseViewModel<Recipe
     override fun onOwnerCreated(restoring: Boolean) {
         if (!restoring) {
             createItems()
+
+            repository.favIdsResult().execute(compositeDisposable,
+                onNext = {
+                    data.value.recipeItems.value = it.favorites
+                    data.notifyObservers()
+                },
+                onError = {
+                    println("ERROR $it")
+                })
         }
     }
 
@@ -21,15 +30,9 @@ class RecipeViewModel(private val repository: Repository) : BaseViewModel<Recipe
             RecipeItem(3, "3")
         )
 
-        repository.saveRecipeItems(list).execute(
-            compositeDisposable,
-            onSuccess = {
-                data.value.recipeItems.value = it
-                data.notifyObservers()
-            },
+        repository.saveRecipeItems(list).execute(compositeDisposable,
             onError = {
-                println("ERROR $it")
-            }
-        )
+                println("ERROR2 $it")
+            })
     }
 }

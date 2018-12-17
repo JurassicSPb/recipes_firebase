@@ -6,7 +6,5 @@ import tools.Mapper
 
 class RecipeItemToStorageRecipeMapper : Mapper<RecipeItem, StorageRecipe>() {
 
-    override fun map(from: RecipeItem) : StorageRecipe {
-        return StorageRecipe(from.id, from.name)
-    }
+    override fun map(from: RecipeItem): StorageRecipe = StorageRecipe(from.id, from.name)
 }
